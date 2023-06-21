@@ -70,22 +70,49 @@ def progress():
             labels.grid(row = counterA, column = 3)
             counterA = counterA + 1
 
-    with open(rightM, "rb") as fq:
-        rightTrackerM = pickle.load(fq)
+    with open(mediumRightName, "rb") as fq:
+        if fq.read(1):
+            fq.seek(0)
+            rightTrackerM = pickle.load(fq)
+        else:
+            rightTrackerM = [0,0,0,0,0]
 
-    with open(wrongM, "rb") as ft:
-        wrongTrackerM = pickle.load(ft)
+    with open(mediumWrongName, "rb") as ft:
+        if ft.read(1):
+            ft.seek(0)
+            wrongTrackerM = pickle.load(ft)
+        else:
+            wrongTrackerM = [0,0,0,0,0]
 
-    with open(rightE, "rb") as fp:
-        rightTrackerE = pickle.load(fp)
-    with open(wrongE, "rb") as fi:
-        wrongTrackerE = pickle.load(fi)
+    with open(easyRightName, "rb") as fp:
+        if fp.read(1):
+            fp.seek(0)
+            rightTrackerE = pickle.load(fp)
+        else:
+            rightTrackerE = [0,0,0,0,0]
 
-    with open(rightH, "rb") as fy:
-        rightTrackerH = pickle.load(fy)
+    with open(easyWrongName, "rb") as fi:
+        if fi.read(1):
+            fi.seek(0)
+            wrongTrackerE = pickle.load(fi)
+        else:
+            wrongTrackerE = [0,0,0,0,0]
 
-    with open(wrongH, "rb") as fo:
-        wrongTrackerH = pickle.load(fo)
+    with open(hardRightName, "rb") as fy:
+        if fy.read(1):
+            fy.seek(0)
+            rightTrackerH = pickle.load(fy)
+        else:
+            rightTrackerH = [0,0,0,0,0]
+      
+
+    with open(hardWrongName, "rb") as fo:
+        if fo.read(1):
+            fo.seek(0)
+            wrongTrackerH = pickle.load(fo)
+        else:
+            wrongTrackerH = [0,0,0,0,0]
+     
 
     rightList = rightTrackerE + rightTrackerM + rightTrackerH
     counterR = 1
@@ -131,12 +158,12 @@ def howToPlay():
 
     '''Disply the image of the Controls'''   
     control = Label(body, text='Controls',fg='blue',font=('Fixedsys',20,'bold'))
-    control.grid(column=0, row=4, sticky =(N,W,E,S))
+    control.grid(column=0, row=5, sticky =(N,W,E,S))
     
     photo = PhotoImage(file = "arrowkeys.gif")
     label = Label(body,image=photo)
     label.image = photo
-    label.grid(column=0, row=5,sticky =(N,W,E,S))
+    label.grid(column=0, row=4,sticky =(N,W,E,S))
 
     '''How to Use the Progress Table'''
     progressTitle = Label(body, text='Progress',fg='blue',font=('Fixedsys',20,'bold'))
@@ -237,7 +264,12 @@ def highScoreList():
 
 
     with open(mediumScores, 'rb') as fv:
-        mediumScoreList = pickle.load(fv)
+        if fv.read(1):
+            fv.seek(0)
+            mediumScoreList = pickle.load(fv)
+        else:
+            mediumScoreList = [0]
+        
     sortsM = sorted([(x,i) for (i,x) in enumerate(mediumScoreList)], reverse=True)
     valuesM = []
     posM = []
@@ -259,7 +291,12 @@ def highScoreList():
                 counterM = counterM + 1
 
     with open(hardScores, 'rb') as fs:
-        hardScoreList = pickle.load(fs)
+        if fs.read(1):
+            fs.seek(0)
+            hardScoreList = pickle.load(fs)
+        else:
+            hardScoreList = [0]
+    
     sortsH = sorted([(x,i) for (i,x) in enumerate(hardScoreList)], reverse=True)
     valuesH = []
     posH = []
@@ -312,20 +349,60 @@ hardQuestions = ['256/8', '1/2 = ?', '1/4 = ?','576/45','1/10 = ?']
 hardAnswers = ['32', '0.5','0.25','12.8','0.1']
 
 '''Stores the List of scores for each level'''
-easyScores = 'easyScore7.pk'
-easyScoreList = []
-with open(easyScores, 'rb') as fv:
-    easyScoreList = pickle.load(fv)
+easyScores = 'easyScore.pk'
+easyScoreList = [0]
+try:
+    with open(easyScores, 'rb') as easyScoresFile:
+        if easyScoresFile.read(1):
+            easyScoresFile.seek(0)
+            easyScoreList = pickle.load(easyScoresFile)
 
-mediumScores = 'mediumScore7.pk'
-mediumScoreList = []
-with open(mediumScores, 'rb') as ft:
-    mediumScoreList = pickle.load(ft)
+except FileNotFoundError:
+    with open(easyScores, 'xb') as easyScoresFile:
+        easyScoresFile.close()
 
-hardScores = 'hardScore3.pk'
-hardScoreList = []
-with open(hardScores, 'rb') as ft:
-    hardScoreList = pickle.load(ft)
+    with open(easyScores, 'rb') as easyScoresFile:
+         if easyScoresFile.read(1):
+            easyScoresFile.seek(0)
+            easyScoreList = pickle.load(easyScoresFile)
+
+        
+
+mediumScores = 'mediumScore.pk'
+mediumScoreList = [0]
+try:
+    with open(mediumScores, 'rb') as mediumScoresFile:
+        if mediumScoresFile.read(1):
+            mediumScoresFile.seek(0)
+            mediumScoreList = pickle.load(mediumScoresFile)
+
+except FileNotFoundError:
+    with open(mediumScores, 'xb') as mediumScoresFile:
+        easyScoresFile.close()
+
+    with open(mediumScores, 'rb') as mediumScoresFile:
+        if mediumScoresFile.read(1):
+            mediumScoresFile.seek(0)
+            mediumScoreList = pickle.load(mediumScoresFile)
+        
+
+hardScores = 'hardScore.pk'
+hardScoreList = [0]
+try:
+    with open(hardScores, 'rb') as hardScoresFile:
+        if hardScoresFile.read(1):
+            hardScoresFile.seek(0)
+            hardScoreList = pickle.load(hardScoresFile)
+
+except FileNotFoundError:
+    with open(hardScores, 'xb') as hardScoresFile:
+        hardScoresFile.close()
+
+    with open(hardScores, 'rb') as hardScoresFile:
+        if hardScoresFile.read(1):
+            hardScoresFile.seek(0)
+            hardScoreList = pickle.load(hardScoresFile)
+
 
 '''Snake Game Fucntion,conrains the Classes used to create the game'''
 def snakeGamePlay(body,levelFlag):
@@ -594,7 +671,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     rightTrackerE.insert(self.easyIndex, track)
                     print(rightTrackerE)
-                    with open(rightE, 'wb') as fp:
+                    with open(easyRightName, 'wb') as fp:
                         pickle.dump(rightTrackerE, fp)
                 else:
                     self.root2.destroy()
@@ -604,7 +681,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     wrongTrackerE.insert(self.easyIndex, track)
                     print(wrongTrackerE)
-                    with open(wrongE, 'wb') as fp:
+                    with open(easyWrongName, 'wb') as fp:
                         pickle.dump(wrongTrackerE, fp)
 
             elif levelFlag == 1:
@@ -617,7 +694,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     rightTrackerM.insert(self.mediumIndex, track)
                     print(rightTrackerM)
-                    with open(rightM, 'wb') as fp:
+                    with open(mediumRightName, 'wb') as fp:
                         pickle.dump(rightTrackerM, fp)
                 else:
                     self.root2.destroy()
@@ -626,7 +703,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     wrongTrackerM.insert(self.mediumIndex, track)
                     print(wrongTrackerM)
-                    with open(wrongM, 'wb') as fp:
+                    with open(mediumWrongName, 'wb') as fp:
                         pickle.dump(wrongTrackerM, fp)
 
             elif levelFlag == 2:
@@ -639,7 +716,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     rightTrackerH.insert(self.hardIndex, track)
                     print(rightTrackerH)
-                    with open(rightH, 'wb') as fp:
+                    with open(hardRightName, 'wb') as fp:
                         pickle.dump(rightTrackerH, fp)
                 else:
                     self.root2.destroy()
@@ -648,7 +725,7 @@ def snakeGamePlay(body,levelFlag):
                     track = value + 1
                     wrongTrackerH.insert(self.hardIndex, track)
                     print(wrongTrackerH)
-                    with open(wrongH, 'wb') as fp:
+                    with open(hardWrongName, 'wb') as fp:
                         pickle.dump(wrongTrackerH, fp)          
 
 
@@ -696,36 +773,110 @@ def snakeGamePlay(body,levelFlag):
 
 
 
-#Create the right an wrong tracker  
-rightE = 'rightE.pk'
-wrongE = 'wrongE.pk'
+#Create the right and wrong answer trackers  
+easyRightName = 'rightE.pk'
+easyWrongName = 'wrongE.pk'
 rightTrackerE = [0,0,0,0,0]
 wrongTrackerE = [0,0,0,0,0]
-with open(rightE, "rb") as fp:
-    rightTrackerE = pickle.load(fp)
+try:
+    with open(easyRightName, "rb") as easyRightFile:
+        if easyRightFile.read(1):
+            easyRightFile.seek(0)
+            rightTrackerE = pickle.load(easyRightFile)
+except FileNotFoundError:
+    with open(easyRightName, "xb") as easyRightFile:
+       easyRightFile.close()
 
-with open(wrongE, "rb") as fi:
-    wrongTrackerE = pickle.load(fi)
+    with open(easyRightName, "rb") as easyRightFile:
+        if easyRightFile.read(1):
+            easyRightFile.seek(0)
+            rightTrackerE = pickle.load(easyRightFile)
+
+try:
+    with open(easyWrongName, "rb") as easyWrongFile:
+        if easyWrongFile.read(1):
+            easyWrongFile.seek(0)
+            wrongTrackerE = pickle.load(easyWrongFile)
+
+except FileNotFoundError:
+    with open(easyWrongName, "xb") as easyWrongFile:
+        easyWrongFile.close()
+
+    with open(easyWrongName, "rb") as easyWrongFile:
+        if easyWrongFile.read(1):
+            easyWrongFile.seek(0)
+            wrongTrackerE = pickle.load(easyWrongFile)
     
-rightM = 'rightM.pk'
-wrongM = 'wrongM.pk'
+mediumRightName = 'rightM.pk'
+mediumWrongName = 'wrongM.pk'
 rightTrackerM = [0,0,0,0,0]
 wrongTrackerM = [0,0,0,0,0]
-with open(rightM, "rb") as fq:
-    rightTrackerM = pickle.load(fq)
 
-with open(wrongM, "rb") as ft:
-    wrongTrackerM = pickle.load(ft)
+try:
+    with open(mediumRightName, "rb") as mediumRightFile:
+        if mediumRightFile.read(1):
+            mediumRightFile.seek(0)
+            wrongTrackerM = pickle.load(mediumRightFile)
 
-rightH = 'rightH.pk'
-wrongH = 'wrongH.pk'
+except FileNotFoundError:
+     with open(mediumRightName, "xb") as mediumRightFile:
+         mediumRightFile.close()
+
+     with open(mediumRightName, "rb") as mediumRightFile:
+        if mediumRightFile.read(1):
+            mediumRightFile.seek(0)
+            wrongTrackerM = pickle.load(mediumRightFile)
+
+try:
+    with open(mediumWrongName, "rb") as mediumWrongFile:
+        if mediumWrongFile.read(1):
+            mediumWrongFile.seek(0)
+            wrongTrackerM = pickle.load(mediumWrongFile)
+
+except FileNotFoundError:
+     with open(mediumWrongName, "xb") as mediumWrongFile:
+         mediumWrongFile.close()
+
+     with open(mediumWrongName, "rb") as mediumWrongFile:
+        if mediumWrongFile.read(1):
+            mediumWrongFile.seek(0)
+            wrongTrackerM = pickle.load(mediumWrongFile)
+
+hardRightName = 'rightH.pk'
+hardWrongName = 'wrongH.pk'
+
 rightTrackerH = [0,0,0,0,0]
 wrongTrackerH = [0,0,0,0,0]
-with open(rightH, "rb") as fy:
-    rightTrackerH = pickle.load(fy)
-    
-with open(wrongH, "rb") as fo:
-    wrongTrackerH = pickle.load(fo)
+
+try:
+    with open(hardRightName, "rb") as hardRightFile:
+        if hardRightFile.read(1):
+            hardRightFile.seek(0)
+            wrongTrackerH = pickle.load(hardRightFile)
+
+except FileNotFoundError:
+     with open(hardRightName, "xb") as hardRightFile:
+         hardRightFile.close()
+
+     with open(hardRightName, "rb") as hardRightFile:
+        if hardRightFile.read(1):
+            hardRightFile.seek(0)
+            wrongTrackerH = pickle.load(hardRightFile)
+
+try:
+    with open(hardWrongName, "rb") as hardWrongFile:
+        if hardWrongFile.read(1):
+            hardWrongFile.seek(0)
+            wrongTrackerH = pickle.load(hardWrongFile)
+
+except FileNotFoundError:
+     with open(hardWrongName, "xb") as hardWrongFile:
+         hardWrongFile.close()
+
+     with open(hardWrongName, "rb") as hardWrongFile:
+        if hardWrongFile.read(1):
+            hardWrongFile.seek(0)
+            wrongTrackerH = pickle.load(hardWrongFile)
 
 #Creates the Tkinter Window 
 root = Tk()
@@ -751,15 +902,24 @@ root.resizable(width=False, height=False)
 root.geometry('{}x{}'.format(800, 600))
 
 #Selectes the highest score from the score lists
-highestScoreE = max(easyScoreList)
+highestScoreE = 0
+if len(easyScoreList) != 0:
+    highestScoreE = max(easyScoreList)
+
 highScoreE = StringVar(root,'0')
 highScoreE.set(str(highestScoreE))
 
-highestScoreM = max(mediumScoreList)
+highestScoreM = 0
+if len(easyScoreList) != 0:
+    highestScoreM = max(mediumScoreList)
+
 highScoreM = StringVar(root,'0')
 highScoreM.set(str(highestScoreM))
 
-highestScoreH = max(hardScoreList)
+highestScoreH = 0
+if len(easyScoreList) != 0:
+    highestScoreH = max(hardScoreList)
+
 highScoreH = StringVar(root,'0')
 highScoreH.set(str(highestScoreH))
 
